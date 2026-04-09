@@ -1,0 +1,105 @@
+server:
+  port: 8080
+  servlet:
+    context-path: /api
+
+spring:
+  application:
+    name: bookstore-backend
+  
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/bookstore?useUnicode=true&characterEncoding=UTF-8&useSSL=false&serverTimezone=Asia/Shanghai&allowPublicKeyRetrieval=true
+    username: root
+    password: 123456
+    hikari:
+      minimum-idle: 5
+      maximum-pool-size: 20
+      idle-timeout: 30000
+      max-lifetime: 1800000
+      connection-timeout: 30000
+      pool-name: BookstoreHikariPool
+  
+  data:
+    redis:
+      host: localhost
+      port: 6379
+      password: 
+      database: 0
+      timeout: 10000ms
+      lettuce:
+        pool:
+          max-active: 8
+          max-wait: -1ms
+          max-idle: 8
+          min-idle: 0
+  
+  cache:
+    type: redis
+    redis:
+      time-to-live: 3600000
+      cache-null-values: false
+  
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 20MB
+  
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss
+    time-zone: Asia/Shanghai
+    serialization:
+      write-dates-as-timestamps: false
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
+
+mybatis:
+  mapper-locations: classpath:mapper/*.xml
+  type-aliases-package: com.bookstore.entity
+  configuration:
+    map-underscore-to-camel-case: true
+    use-generated-keys: true
+
+jwt:
+  secret: bookstoreSecretKey2024VeryLongSecretKeyForJWTTokenGeneration
+  expiration: 86400000
+  header: Authorization
+  prefix: Bearer 
+
+app:
+  upload:
+    path: d:/TRAE/test_trae/backend/uploads/
+    allowed-types: jpg,jpeg,png,gif,webp
+    max-size: 10485760
+  
+  recommendation:
+    cache-expire: 300
+    user-based-weight: 0.4
+    item-based-weight: 0.4
+    content-based-weight: 0.2
+
+logging:
+  level:
+    root: WARN
+    com.bookstore: INFO
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"
+
+springdoc:
+  api-docs:
+    enabled: true
+    path: /v3/api-docs
+  swagger-ui:
+    enabled: true
+    path: /swagger-ui.html
+  packages-to-scan: com.bookstore.controller
+  paths-to-match: /**
+
+knife4j:
+  enable: true
+  setting:
+    language: zh_cn
+    enable-swagger-models: true
+    enable-document-manage: true
+    swagger-model-name: 实体类列表
